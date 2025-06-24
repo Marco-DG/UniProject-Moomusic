@@ -26,7 +26,14 @@ SECRET_KEY = "django-insecure-fbmr7*n8fnwhlfbf8wjly76g@22g0z5@-1rb5!kc%=d1j-k9pa
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = "true"  # or just set False on prod
 
-ALLOWED_HOSTS = ['example.com', 'localhost', '127.0.0.1']  # add your deployment domain
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    os.getenv('RAILWAY_STATIC_URL', 'web-production-7fa0d.up.railway.app')
+]
+
+
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
