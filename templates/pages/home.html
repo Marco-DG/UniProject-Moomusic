@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if recommendations %}
+<section class="discover-carousel">
+  <div class="section-header">
+    <h2>Recommended for You</h2>
+  </div>
+  <div class="carousel-track-wrapper">
+    <button class="carousel-btn prev" aria-label="Scroll Left">‹</button>
+    <div class="carousel" id="rec-carousel">
+      {% for rec in recommendations %}
+      <div class="carousel-item">
+        <a href="{% url 'track' rec.track.pk %}">
+          <div class="cover-wrapper">
+            <img
+              src="{{ rec.track.cover_image.url|default:'/media/default.jpg' }}"
+              alt="{{ rec.track.title }}"
+            >
+          </div>
+          <div class="item-info">
+            <h4 class="carousel-title">{{ rec.track.title }}</h4>
+            <p class="carousel-artist">{{ rec.track.artist }}</p>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-btn next" aria-label="Scroll Right">›</button>
+  </div>
+</section>
+{% endif %}
+
+<section class="discover-carousel">
+  <div class="section-header">
+    <h2>Discover Tracks</h2>
+  </div>
+
+  <div class="carousel-track-wrapper">
+    <button class="carousel-btn prev" aria-label="Scroll Left">‹</button>
+
+    <div class="carousel" id="carousel">
+      {% for track in tracks %}
+      <div class="carousel-item">
+        <a href="{% url 'track' track.pk %}">
+          <div class="cover-wrapper">
+            <img
+              src="{{ track.cover_image.url|default:'/media/default.jpg' }}"
+              alt="{{ track.title }}"
+            >
+          </div>
+          <div class="item-info">
+            <h4 class="carousel-title">{{ track.title }}</h4>
+            <p class="carousel-artist">{{ track.artist }}</p>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <button class="carousel-btn next" aria-label="Scroll Right">›</button>
+  </div>
+</section>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.carousel-track-wrapper').forEach(wrapper => {
+      const carousel = wrapper.querySelector('.carousel');
+      const btnNext = wrapper.querySelector('.carousel-btn.next');
+      const btnPrev = wrapper.querySelector('.carousel-btn.prev');
+      const originals = Array.from(carousel.children);
+      const count = originals.length;
+
+      // 1) Clone originals → end & front
+      originals.forEach(el => carousel.appendChild(el.cloneNode(true)));
+      originals.slice().reverse()
+        .forEach(el => carousel.insertBefore(el.cloneNode(true), carousel.firstChild));
+
+      // 2) Compute item width + gap
+      const style = getComputedStyle(carousel);
+      const gap = parseFloat(style.columnGap || style.gap) || 0;
+      const itemW = originals[0].getBoundingClientRect().width + gap;
+
+      // 3) Jump into the middle (real items)
+      carousel.scrollLeft = itemW * count;
+
+      // 4) Scroll‑jump logic
+      let isRepositioning = false;
+      carousel.addEventListener('scroll', () => {
+        if (isRepositioning) return;
+
+        if (carousel.scrollLeft <= 0) {
+          isRepositioning = true;
+          carousel.style.scrollBehavior = 'auto';
+          carousel.scrollLeft = itemW * count;
+          requestAnimationFrame(() => {
+            carousel.style.scrollBehavior = 'smooth';
+            isRepositioning = false;
+          });
+        } else if (carousel.scrollLeft >= itemW * (count * 2)) {
+          isRepositioning = true;
+          carousel.style.scrollBehavior = 'auto';
+          carousel.scrollLeft = itemW * count;
+          requestAnimationFrame(() => {
+            carousel.style.scrollBehavior = 'smooth';
+            isRepositioning = false;
+          });
+        }
+      });
+
+      // 5) Prev/Next buttons
+      btnNext.addEventListener('click', () => {
+        carousel.scrollBy({ left: itemW, behavior: 'smooth' });
+      });
+      btnPrev.addEventListener('click', () => {
+        carousel.scrollBy({ left: -itemW, behavior: 'smooth' });
+      });
+    });
+  });
+</script>
+
+  
+{% endblock %}

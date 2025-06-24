@@ -1,0 +1,56 @@
+/* Buttons */
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.glass-btn {
+    background: var(--clr-glass);
+    backdrop-filter: blur(8px);
+    color: var(--clr-text);
+    border: 1px solid var(--clr-glass-strong);
+    transition: background 0.2s ease;
+}
+
+.glass-btn:hover {
+    background: var(--clr-glass-strong);
+}
+
+.btn.small-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+}
+
+/* Layout helpers */
+.home-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 2rem 1rem;
+}
+
+.main-content {
+    flex: 1;
+    max-width: 1000px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Cards */
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    background-color: white;
+}

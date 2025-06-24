@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="playlist-detail section glass-card">
+
+  {% if is_private %}
+    <div class="private-message">
+      <h3>This playlist is private.</h3>
+      <p>You cannot view its contents.</p>
+    </div>
+  {% else %}
+    <h2>{{ playlist.name }}</h2>
+    <p>by {{ playlist.user.username }}</p>
+
+    {% if playlist.playlisttrack_set.all %}
+      <ul class="recent-list">
+        {% for pt in playlist.playlisttrack_set.all %}
+          <li class="track-with-controls">
+            <a href="{% url 'track' pt.track.pk %}" class="track-item">
+              <img src="{{ pt.track.cover_image.url|default:'/media/default.jpg' }}"
+                   alt="{{ pt.track.title }}"
+                   class="track-thumb">
+              <div class="track-info">
+                <span class="track-title">{{ pt.track.title }}</span>
+                <span class="track-artist">{{ pt.track.artist }}</span>
+              </div>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="empty-state">No tracks in this playlist.</p>
+    {% endif %}
+  {% endif %}
+
+</div>
+{% endblock %}

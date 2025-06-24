@@ -1,0 +1,135 @@
+/* === Profile Settings Page === */
+
+/* === Layout Container === */
+.settings-container {
+    max-width: 720px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    text-align: left;
+    /* ← aligns all inner content to the left */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* === Avatar Display and Edit Button === */
+.avatar-edit-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.large-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+}
+
+.edit-avatar-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.edit-avatar-btn:hover {
+    background: #f0f0f0;
+}
+
+.edit-avatar-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: #333;
+}
+
+/* === Username Display === */
+.username-display {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-top: 0.75rem;
+}
+
+/* === Avatar Chooser Modal === */
+.avatar-chooser-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: none;
+    /* shown by JS */
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+}
+
+.avatar-chooser-panel {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 320px;
+    width: 100%;
+}
+
+.avatar-chooser-panel h3 {
+    margin-bottom: 1rem;
+}
+
+/* === Avatar Options === */
+.avatar-options {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.option-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.option-img:hover {
+    border-color: var(--clr-accent);
+}
+
+/* === Buttons === */
+.btn.glass-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn.glass-btn:hover {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+
+/* right below .username-display */
+.role-display {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    color: #555;
+}
+
+.role-display strong {
+    color: var(--clr-accent-dark);
+    /* or your accent color */
+}

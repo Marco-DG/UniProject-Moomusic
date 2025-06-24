@@ -1,0 +1,155 @@
+/* === Sidebar Layout === */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 260px;
+    position: sticky;
+    top: 80px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    padding-right: 4px;
+    border-radius: 12px;  /* Rounded corners */
+}
+
+/* === Sidebar Inner Container === */
+.sidebar-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1rem;
+}
+
+/* === Card Style (Shared) === */
+.glass-card {
+    background: var(--clr-glass);
+    backdrop-filter: blur(8px);
+    padding: 1rem;
+    border-radius: var(--radius);
+    color: var(--clr-text);
+    box-shadow: none;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+    box-shadow: var(--shadow-soft);
+}
+
+.glass-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+/* === Track Section (Recently Played & Favourites) === */
+.track-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.track-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.track-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    color: var(--clr-text);
+    border-radius: 6px;
+    transition: background 0.3s ease;
+}
+
+.track-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.track-thumb {
+    width: 42px;
+    height: 42px;
+    border-radius: 6px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.track-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.track-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.track-artist {
+    font-size: 0.8rem;
+    color: var(--clr-muted);
+    margin-top: 0.15rem;
+}
+
+/* === Playlists === */
+.playlist-list {
+    overflow-y: auto;
+    max-height: 100%;
+    margin-top: 1rem;
+}
+
+.playlist-list li {
+    border-bottom: none;
+}
+
+.playlist-list a {
+    display: block;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    color: var(--clr-text);
+    font-size: 0.95rem;
+    transition: background 0.3s ease, color 0.3s ease;
+    border-radius: 6px;
+}
+
+.playlist-list a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--clr-muted);  /* Soft muted color on hover */
+}
+
+/* === Empty State Message === */
+.empty-state {
+    font-size: 0.9rem;
+    color: var(--clr-muted);
+    padding: 0.5rem 0;
+}
+
+/* === Scrollbar Styling (Global) === */
+.sidebar,
+.glass-card,
+.playlist-list {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+}
+
+.sidebar::-webkit-scrollbar,
+.glass-card::-webkit-scrollbar,
+.playlist-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.glass-card::-webkit-scrollbar-thumb,
+.playlist-list::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track,
+.glass-card::-webkit-scrollbar-track,
+.playlist-list::-webkit-scrollbar-track {
+    background: transparent;
+}

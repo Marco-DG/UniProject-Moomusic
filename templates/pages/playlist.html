@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="playlist-detail section glass-card">
+
+  <div class="playlist-header">
+    <h2>{{ playlist.name }}</h2>
+  
+    <div class="playlist-controls">
+      <div class="visibility-toggle" style="display: flex; align-items: center; gap: 0.5rem;">
+        <span id="visibility-label">
+          {% if playlist.public %}Public{% else %}Private{% endif %}
+        </span>
+  
+        {% if playlist.public %}
+        <input type="text"
+               readonly
+               value="{{ public_url }}"
+               id="public-url"
+               onclick="autoSelectUrl(this)"
+               style="width: 220px; font-size: 0.85rem; padding: 0.15rem 0.4rem; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; background: #f7f7f7; color: #444;">
+        {% endif %}
+  
+        <label class="switch">
+          <input type="checkbox" id="public-switch" {% if playlist.public %}checked{% endif %}>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+
+  {% if playlist.playlisttrack_set.all %}
+    <ul class="recent-list">
+      {% for pt in playlist.playlisttrack_set.all %}
+        <li class="track-with-controls">
+          <a href="{% url 'track' pt.track.pk %}" class="track-item">
+            <img src="{{ pt.track.cover_image.url|default:'/media/default.jpg' }}"
+                 alt="{{ pt.track.title }}"
+                 class="track-thumb">
+            <div class="track-info">
+              <span class="track-title">{{ pt.track.title }}</span>
+              <span class="track-artist">{{ pt.track.artist }}</span>
+            </div>
+          </a>
+
+          {% if request.user == playlist.user %}
+            <div class="track-controls">
+              {# Move Up / Down #}
+              <form method="post"
+                    action="{% url 'playlist_move_track' playlist.pk pt.track.pk %}"
+                    class="inline-form">
+                {% csrf_token %}
+                {% if not forloop.first %}
+                  <button type="submit" name="action" value="up"
+                          class="icon-btn" title="Move up">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 8l-6 6h12l-6-6z" fill="currentColor"/>
+                    </svg>
+                  </button>
+                {% endif %}
+                {% if not forloop.last %}
+                  <button type="submit" name="action" value="down"
+                          class="icon-btn" title="Move down">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 16l6-6H6l6 6z" fill="currentColor"/>
+                    </svg>
+                  </button>
+                {% endif %}
+              </form>
+
+              {# Remove from playlist #}
+              <form method="post"
+                    action="{% url 'playlist_remove_track' playlist.pk pt.track.pk %}"
+                    class="inline-form">
+                {% csrf_token %}
+                <button type="submit"
+                        class="icon-btn delete-btn"
+                        title="Remove from playlist">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 6l12 12M6 18L18 6" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </button>
+              </form>
+            </div>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="empty-state">No tracks in this playlist.</p>
+  {% endif %}
+</div>
+
+
+  
+<script>
+  document.getElementById('public-switch')?.addEventListener('change', function () {
+      fetch("{% url 'playlist_detail' playlist.pk %}", {
+          method: "POST",
+          headers: {
+              "X-CSRFToken": "{{ csrf_token }}",
+              "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: this.checked ? "public=on" : ""
+      }).then(res => {
+          if (res.ok) {
+              location.reload();  // Refresh to show/hide the share box
+          } else {
+              alert("Failed to update playlist status.");
+          }
+      });
+  });
+</script>
+
+
+  
+
+<script>
+    function autoSelectUrl(input) {
+      input.select();
+      input.setSelectionRange(0, 99999); // For mobile devices
+    }
+</script>
+    
+  
+  
+
+{% endblock %}

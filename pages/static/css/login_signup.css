@@ -1,0 +1,113 @@
+/* ——— 1. Container & Layout ——— */
+.login-container {
+    max-width: 360px;
+    margin: 4rem auto;
+    padding: 0 1rem;
+    text-align: center;
+  }
+  
+  .login-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #d8c69a;              /* cream-strong */
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  
+  /* ——— 2. Glass‑Cream Card ——— */
+  .form-card {
+    background: rgba(242, 233, 212, 0.25);   /* cream-50 */
+    backdrop-filter: blur(8px);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: transform 0.3s ease-out;
+  }
+  .form-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* ——— 3. Labels & Inputs ——— */
+  .form-card label {
+    font-weight: 500;
+    color: #1a1a1a;            /* text-main */
+    text-align: left;
+  }
+  
+  .form-card input {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ccc;    /* border-light */
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 100%;
+    transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+  }
+  .form-card input:focus {
+    border-color: #d8c69a;     /* cream-strong */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(242, 233, 212, 0.4);  /* cream-60 ring */
+  }
+  
+  /* ——— 4. Error States ——— */
+  .form-card .error {
+    color: #e74c3c;            /* error-red */
+    font-size: 0.9rem;
+  }
+  .form-card input.error {
+    border-color: #e74c3c;
+  }
+  
+  /* ——— 5. Buttons ——— */
+  .btn-login,
+  .btn-signup {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    background: rgba(242, 233, 212, 0.4);   /* cream-60 */
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    color: #1a1a1a;            /* text-main */
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease-out, transform 0.2s ease-out;
+  }
+  .btn-login:hover,
+  .btn-signup:hover {
+    background: rgba(242, 233, 212, 0.6);   /* cream-80 */
+    transform: translateY(-1px);
+  }
+  
+  /* ——— 6. Footer Links ——— */
+  .form-footer {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #555;               /* text-muted */
+  }
+  .form-footer a {
+    color: #d8c69a;            /* cream-strong */
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease-out;
+  }
+  .form-footer a:hover {
+    color: #1a1a1a;            /* text-main */
+    text-decoration: underline;
+  }
+  
+  /* ——— 7. Responsive Tweaks ——— */
+  @media (max-width: 400px) {
+    .login-container {
+      margin: 2rem auto;
+    }
+    .form-card {
+      padding: 1.5rem;
+    }
+    .login-container h2 {
+      font-size: 1.5rem;
+    }
+  }
+  

@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MooMusic</title>
+
+  <!-- fonts & your CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;...&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/login_signup.css' %}">
+  <link rel="stylesheet" href="{% static 'css/track.css' %}">
+  <link rel="stylesheet" href="{% static 'css/track_management.css' %}">
+  <link rel="stylesheet" href="{% static 'css/elements/navbar.css' %}">
+  <link rel="stylesheet" href="{% static 'css/elements/sidebar.css' %}">
+  <link rel="stylesheet" href="{% static 'css/pages/home.css' %}">
+  <link rel="stylesheet" href="{% static 'css/pages/profile_settings.css' %}">
+  <link rel="stylesheet" href="{% static 'css/pages/playlist.css' %}">
+
+</head>
+<body>
+
+  {% include 'elements/navbar.html' %}
+
+  <div class="home-page">
+    {# — Left sidebar (real or empty) — #}
+    {% if user.is_authenticated %}
+      {% include 'elements/sidebar.html' %}
+    {% else %}
+      <aside class="sidebar placeholder"></aside>
+    {% endif %}
+
+    {# — Content slot that spans from sidebar to right edge — #}
+    <div class="content-slot">
+      <div class="home-content">
+        <main class="main-content">
+          {% block content %}{% endblock %}
+        </main>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

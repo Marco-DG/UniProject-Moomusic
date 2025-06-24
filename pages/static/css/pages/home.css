@@ -1,0 +1,144 @@
+/* Section Header */
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.section-header h2 {
+    font-size: 1.8rem;
+    color: var(--clr-text);
+}
+
+
+/* === Discover Carousel === */
+.discover-carousel {
+    width: 100%;
+}
+
+/* Carousel Track Wrapper */
+.carousel-track-wrapper {
+    position: relative;
+    /* for overlaying buttons */
+    overflow: hidden;
+    /* hide scrollbar & overflow */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.carousel-track-wrapper::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, Edge */
+}
+
+/* Carousel Controls (buttons) */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.6);
+    border: none;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.5rem;
+    color: var(--clr-text);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.2s ease;
+}
+
+.carousel-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.carousel-btn.prev {
+    left: 0.5rem;
+}
+
+.carousel-btn.next {
+    right: 0.5rem;
+}
+
+/* Carousel Track */
+.carousel {
+    display: flex;
+    gap: 1rem;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.5rem;
+  
+    overflow-x: auto;
+    overflow-y: hidden;
+  
+    /* hide scrollbar in Firefox */
+    scrollbar-width: none;
+    /* hide scrollbar in IE/Edge */
+    -ms-overflow-style: none;
+  }
+  
+
+/* Carousel Item */
+.carousel-item {
+    flex: 0 0 200px;
+    scroll-snap-align: start;
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.carousel-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Image Wrapper */
+.cover-wrapper {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+}
+
+.cover-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Item Info */
+.item-info {
+    padding: 0.75rem;
+}
+
+/* Title & Artist - remove underlines and inherit color */
+.carousel-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.carousel-title {
+    font-size: 1rem;
+    margin: 0 0 0.25rem;
+    color: var(--clr-text);
+}
+
+.carousel-artist {
+    font-size: 0.85rem;
+    color: var(--clr-muted);
+}
+
+/* === Responsive === */
+@media (max-width: 900px) {
+    .carousel-item {
+        flex: 0 0 150px;
+    }
+
+    .carousel-btn {
+        width: 2rem;
+        height: 2rem;
+        font-size: 1.25rem;
+    }
+}

@@ -1,0 +1,122 @@
+{# templates/pages/profile_settings.html #}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="settings-container">
+  <h2>Your Profile</h2>
+
+  <div class="avatar-edit-wrapper">
+    <img 
+      src="{{ profile.get_avatar_url }}" 
+      alt="{{ user.username }}’s avatar" 
+      class="large-avatar"
+    >
+    <button id="editAvatarBtn" class="edit-avatar-btn" title="Change avatar">
+      <!-- pencil icon -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm18.71-10.04a1 
+                 1 0 0 0 0-1.41l-2.5-2.5a1 1 0 0 0-1.41 
+                 0l-1.83 1.83 3.75 3.75 1.99-1.67z"/>
+      </svg>
+    </button>
+  </div>
+
+  <p class="username-display">{{ user.username }}</p>
+  
+  <p class="role-display">
+    Role: 
+    {% if is_curator %}
+      <strong>Curator</strong>
+    {% else %}
+      <strong>Listener</strong>
+    {% endif %}
+  </p>
+
+  {% if is_curator %}
+    <div class="curator-panel">
+      <h3>Track Management</h3>
+      <p>
+        <a href="{% url 'track-add' %}" class="btn glass-btn">+ Add New Track</a>
+      </p>
+      {% if curator_tracks %}
+        <table class="track-management-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Artist</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in curator_tracks %}
+            <tr>
+              <td>{{ t.title }}</td>
+              <td>{{ t.artist }}</td>
+              <td class="actions">
+                <a href="{% url 'track-edit' t.pk %}">Edit</a> |
+                <a href="{% url 'track-delete' t.pk %}">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>No tracks in the library yet.</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+
+</div>
+
+{# — Avatar chooser panel (initially hidden) — #}
+<div id="avatarChooser" class="avatar-chooser-backdrop" style="display:none;">
+  <div class="avatar-chooser-panel">
+    <h3>Select your avatar</h3>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="avatar_choice" id="avatar_choice">
+      <div class="avatar-options">
+        <img 
+          src="{% static 'rsc/moomusic_male_avatar_logo.png' %}" 
+          alt="Male" 
+          data-choice="M" 
+          class="option-img"
+        >
+        <img 
+          src="{% static 'rsc/moomusic_female_avatar_logo.png' %}" 
+          alt="Female" 
+          data-choice="F" 
+          class="option-img"
+        >
+      </div>
+    </form>
+    <button id="cancelAvatarBtn" class="btn glass-btn">Cancel</button>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const edtBtn    = document.getElementById('editAvatarBtn');
+    const cancelBtn = document.getElementById('cancelAvatarBtn');
+    const chooser   = document.getElementById('avatarChooser');
+    const choiceIn  = document.getElementById('avatar_choice');
+    const imgs      = document.querySelectorAll('.avatar-options .option-img');
+
+    edtBtn.addEventListener('click', () => {
+      chooser.style.display = 'flex';
+    });
+    cancelBtn.addEventListener('click', () => {
+      chooser.style.display = 'none';
+    });
+    imgs.forEach(img => {
+      img.addEventListener('click', () => {
+        choiceIn.value = img.dataset.choice;
+        img.closest('form').submit();
+      });
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,55 @@
+/* —— CSS Variables —— */
+:root {
+    --clr-bg: #ffffff;
+    --clr-text: #1a1a1a;
+    --clr-muted: #888;
+    --clr-accent: #f2e9d4;
+    --clr-accent-dark: #d8c69a;
+    --clr-glass: rgba(255, 255, 255, 0.4);
+    --clr-glass-strong: rgba(255, 255, 255, 0.6);
+    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.1);
+    --radius: 12px;
+    --shadow-soft: 0 4px 10px rgba(0, 0, 0, 0.05);
+    --border-light: #e0e0e0;
+}
+
+/* Universal Scrollbar Styling */
+*::-webkit-scrollbar,
+*::-moz-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+*::-webkit-scrollbar-thumb,
+*::-moz-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+*::-webkit-scrollbar-track,
+*::-moz-scrollbar-track {
+    background: transparent;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+}
+
+/* —— Global Styles —— */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    color: var(--clr-text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--clr-bg);
+}

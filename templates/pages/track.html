@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="home-container{% if not user.is_authenticated %} no-sidebar{% endif %}">
+
+  <main class="main-content">
+    <div class="track-card">
+
+      <!-- Cover & Info -->
+      <div class="track-header">
+        <div class="cover-large-wrapper">
+          {% if track.cover_image %}
+            <img src="{{ track.cover_image.url }}" alt="{{ track.title }}">
+          {% else %}
+            <img src="/media/default.jpg" alt="{{ track.title }}">
+          {% endif %}
+        </div>
+        <div class="track-details">
+          <div class="track-meta">
+            <h1 class="track-title">{{ track.title }}</h1>
+            <p class="track-artist">{{ track.artist }}</p>
+            {% if track.album %}
+              <p class="track-album">{{ track.album }} • {{ track.year }}</p>
+            {% endif %}
+          </div>
+        
+          {% if user.is_authenticated %}
+          <div class="track-actions">
+            <form method="post" action="{% url 'toggle_favourite' track.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="icon-btn" title="{% if is_fav %}Unfavorite{% else %}Favorite{% endif %}">
+                {% if is_fav %}
+                  <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                {% else %}
+                  <svg width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                {% endif %}
+              </button>
+            </form>
+            <button id="saveBtn" class="btn glass-btn small-btn">Save to Playlist</button>
+          </div>
+          {% endif %}
+        </div>
+        
+      </div>
+
+      <!-- Player -->
+      <div class="player-section">
+        <button class="ctrl-btn" onclick="previousTrack()" {% if not previous_track %}disabled{% endif %}>
+          <svg width="24" height="24" viewBox="0 0 24 24"><path d="M15 18l-8-6 8-6z"/></svg>
+        </button>
+        <audio id="player" controls>
+          <source src="{{ track.audio_file.url }}" type="audio/mpeg">
+        </audio>
+        <button class="ctrl-btn" onclick="nextTrack()" {% if not next_track %}disabled{% endif %}>
+          <svg width="24" height="24" viewBox="0 0 24 24"><path d="M9 6l8 6-8 6z"/></svg>
+        </button>
+      </div>
+
+      {% if user.is_authenticated %}
+      <!-- Modal -->
+      <div id="saveModal" class="modal-backdrop hidden">
+        <div class="modal">
+          <h2>Save to Playlist</h2>
+          <form method="post" action="{% url 'add_to_playlist' track.pk %}">
+            {% csrf_token %}
+            <div class="playlist-list">
+              {% for pl in playlists %}
+              <label>
+                <input type="checkbox" name="playlist_ids" value="{{ pl.pk }}">
+                {{ pl.name }}
+              </label>
+              {% endfor %}
+            </div>
+            <input type="text" name="new_playlist_name" placeholder="Create new playlist" class="new-playlist-input">
+            <div class="modal-footer">
+              <button type="submit" class="btn glass-btn">Done</button>
+              <button type="button" id="modalClose" class="btn glass-btn">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Track Info -->
+      <section class="track-metadata">
+        <h2>Track Info</h2>
+        <ul>
+          <li><strong>Title:</strong> {{ track.title }}</li>
+          <li><strong>Artist:</strong> {{ track.artist }}</li>
+          {% if track.album %}
+            <li><strong>Album:</strong> {{ track.album }}</li>
+          {% endif %}
+          {% if track.year %}
+            <li><strong>Year:</strong> {{ track.year }}</li>
+          {% endif %}
+        </ul>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  const player = document.getElementById('player'),
+        prevLink = {% if previous_track %}"{% url 'track' previous_track.pk %}"{% else %}null{% endif %},
+        nextLink = {% if next_track %}"{% url 'track' next_track.pk %}"{% else %}null{% endif %};
+  player.onended = ()=> nextLink && (window.location = nextLink);
+  function previousTrack(){ prevLink && (window.location = prevLink) }
+  function nextTrack(){ nextLink && (window.location = nextLink) }
+
+  const modal = document.getElementById('saveModal'),
+        openBtn = document.getElementById('saveBtn'),
+        closeBtn = document.getElementById('modalClose');
+  openBtn?.addEventListener('click', ()=> modal.classList.remove('hidden'));
+  closeBtn?.addEventListener('click', ()=> modal.classList.add('hidden'));
+  modal.addEventListener('click', e=> { if(e.target===modal) modal.classList.add('hidden') });
+</script>
+{% endblock %}

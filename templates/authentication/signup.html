@@ -1,0 +1,46 @@
+{# signup.html #}
+{% extends 'base.html' %}
+{% block content %}
+  <div class="login-container">
+    <h2>Sign Up for moomusic</h2>
+    <form method="post" class="form-card">
+      {% csrf_token %}
+
+      {# Non‑field errors (e.g. password mismatch) #}
+      {% if form.non_field_errors %}
+        <div class="error">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      <div class="form-group">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {{ form.username.errors }}
+      </div>
+
+      <div class="form-group">
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {{ form.email.errors }}
+      </div>
+
+      <div class="form-group">
+        {{ form.password1.label_tag }}
+        {{ form.password1 }}
+        {{ form.password1.errors }}
+      </div>
+
+      <div class="form-group">
+        {{ form.password2.label_tag }}
+        {{ form.password2 }}
+        {{ form.password2.errors }}
+      </div>
+
+      <button type="submit" class="glass-btn btn-signup">Sign Up</button>
+    </form>
+    <p class="form-footer">
+      Already have an account? <a href="{% url 'login' %}">Log in</a>
+    </p>
+  </div>
+{% endblock %}

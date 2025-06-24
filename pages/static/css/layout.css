@@ -1,0 +1,77 @@
+/* === Variables === */
+/* === Layout variables === */
+:root {
+    --sidebar-w: 260px;
+    --main-max: 1000px;
+    --gap: 2rem;
+}
+
+.home-page {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: var(--sidebar-w);
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    background: #fff;
+    box-shadow: var(--shadow-soft);
+    z-index: 2; /* above home-content */
+}
+
+
+
+
+.home-content {
+    position: fixed;
+    top: 80px;               /* same as sidebar top */
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: var(--main-max);
+    width: 90vw;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    background: white;       /* or transparent if you want */
+    z-index: 1;
+    box-sizing: border-box;
+    padding: 2rem 1rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+}
+
+/* === Breakpoint: ≤1600px switch to sidebar + flex layout === */
+@media (max-width: 1600px) {
+    /* Turn off the fixed centering */
+    .home-content {
+      position: static;       /* flow in document */
+      top: auto;              /* reset fixed offsets */
+      left: auto;
+      transform: none;        /* no translate */
+      
+      width: 100%;            /* full width of flex item */
+      max-width: var(--main-max);
+      margin: 0 auto;         /* center within the remaining space */
+      height: auto;           /* let it grow with content */
+      overflow-y: visible;    /* normal flow scrolling */
+    }
+  
+    /* Sidebar becomes part of flow on the left */
+    .sidebar {
+      position: static;       /* no longer fixed */
+      top: auto;
+      left: auto;
+      width: var(--sidebar-w);
+      height: auto;           /* expand with content */
+      box-shadow: none;       /* optional: remove shadow if you like */
+    }
+  
+    /* Ensure the page uses flex layout */
+    .home-page {
+      display: flex;
+    }
+  }
+  

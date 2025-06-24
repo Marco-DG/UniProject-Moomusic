@@ -1,0 +1,67 @@
+{% if user.is_authenticated %}
+<aside class="sidebar">
+  <div class="sidebar-inner">
+
+    {% if recent_songs %}
+    <div class="glass-card section track-section">
+      <h3>Recently Played</h3>
+      <ul class="track-list">
+        {% for t in recent_songs %}
+        <li>
+          <a href="{% url 'track' t.pk %}" class="track-item">
+            <img src="{{ t.cover_image.url|default:'/media/default.jpg' }}"
+                 alt="{{ t.title }}" class="track-thumb">
+            <div class="track-info">
+              <span class="track-title">{{ t.title }}</span>
+              <span class="track-artist">{{ t.artist }}</span>
+            </div>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <div class="glass-card section playlists">
+      <h3>Playlists</h3>
+      {% if playlists %}
+      <ul class="playlist-list">
+        {% for pl in playlists %}
+        <li>
+          <a href="{% url 'playlist_detail' pl.pk %}">{{ pl.name }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="empty-state">No playlists yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="glass-card section track-section">
+      <h3>Favourites</h3>
+    
+      {% if favourites %}
+        <ul class="track-list">
+          {% for fav in favourites %}
+          <li>
+            <a href="{% url 'track' fav.pk %}" class="track-item">
+              <img src="{{ fav.cover_image.url|default:'/media/default.jpg' }}"
+                   alt="{{ fav.title }}" class="track-thumb">
+              <div class="track-info">
+                <span class="track-title">{{ fav.title }}</span>
+                <span class="track-artist">{{ fav.artist }}</span>
+              </div>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="empty-state">No favourites yet.</p>
+      {% endif %}
+    
+    </div>
+    
+
+  </div>
+</aside>
+{% endif %}

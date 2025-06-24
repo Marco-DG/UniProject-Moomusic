@@ -1,0 +1,161 @@
+/* track_management.css */
+
+/* ── 1. Track Management Panel (Profile Page) ── */
+.curator-panel {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--clr-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+}
+
+.curator-panel h3 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: var(--clr-text);
+}
+
+.curator-panel p {
+  margin-bottom: 1rem;
+}
+
+.curator-panel .btn.glass-btn {
+  font-size: 1rem;
+}
+
+/* ── 2. Track Management Table ── */
+.track-management-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.track-management-table th,
+.track-management-table td {
+  padding: 0.75rem;
+  border: 1px solid var(--border-light);
+  text-align: left;
+}
+
+.track-management-table th {
+  background: var(--clr-glass);
+  color: var(--clr-text);
+  font-weight: 600;
+}
+
+.track-management-table tbody tr:nth-child(even) {
+  background: var(--clr-glass-strong);
+}
+
+.track-management-table .actions a {
+  color: var(--clr-accent-dark);
+  text-decoration: none;
+  margin: 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.track-management-table .actions a:hover {
+  text-decoration: underline;
+}
+
+
+/* ── 4. Track Form (Add / Edit) ── */
+.track-form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+.track-form-container h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.track-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.track-form-container label {
+  font-weight: 500;
+  color: var(--clr-text);
+}
+
+.track-form-container input,
+.track-form-container select,
+.track-form-container textarea {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.track-form-container input:focus,
+.track-form-container select:focus,
+.track-form-container textarea:focus {
+  outline: none;
+  border-color: var(--clr-accent-dark);
+}
+
+.track-form-container button {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+
+/* ── 5. Delete Confirmation ── */
+.delete-confirm-container {
+  max-width: 480px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+}
+
+.delete-confirm-container h2 {
+  margin-bottom: 1rem;
+  color: #c0392b;
+}
+
+.delete-confirm-container p {
+  margin-bottom: 1.5rem;
+  color: var(--clr-text);
+}
+
+.delete-confirm-container form {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.delete-confirm-container .btn {
+  min-width: 100px;
+}
+
+/* ── 6. Responsive Tweaks ── */
+@media (max-width: 768px) {
+  .track-list {
+    grid-template-columns: 1fr;
+  }
+
+  .track-management-table th,
+  .track-management-table td {
+    padding: 0.5rem;
+  }
+}
+
+
+/* Hide the “Clear” checkbox and its label in the track form */
+.track-form-container input[type="checkbox"][name$="-clear"] {
+  display: none !important;
+}
+.track-form-container label[for$="-clear_id"] {
+  display: none !important;
+}

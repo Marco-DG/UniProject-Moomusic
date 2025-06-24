@@ -1,0 +1,330 @@
+{% load static %}
+<header id="navbar">
+  <!-- Left: Logo -->
+  <div class="navbar-left">
+    <a href="{% url 'home' %}" class="logo">
+      <img src="{% static 'rsc/moomusic_logo.png' %}" alt="MooMusic Logo" class="logo-icon">
+      <img src="{% static 'rsc/moomusic_name.png' %}" alt="MooMusic Name" class="logo-text">
+    </a>
+  </div>
+
+  <!-- Center: Search Bar -->
+  <div class="navbar-center">
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search tracks..." autocomplete="off" />
+    
+      <button id="filterBtn" class="filter-btn" title="Advanced Filters" type="button">
+        <svg class="filter-icon" viewBox="0 0 24 24">
+          <path d="M3 5h18M6 12h12M10 19h4"
+                stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    
+      <div class="search-dropdown-wrapper">
+        <div id="searchResults" class="dropdown-search-results"></div>
+        <div id="filterPanel" class="dropdown-filter-panel">
+          <div class="year-range-filter">
+            <div class="year-filter-group">
+              <label for="yearFrom" class="year-label">From</label>
+              <select id="yearFrom" class="year-dropdown" name="year_from">
+                <option value="">Any</option>
+              </select>
+            </div>
+          
+            <div class="year-filter-group">
+              <label for="yearTo" class="year-label">To</label>
+              <select id="yearTo" class="year-dropdown" name="year_to" disabled>
+                <option value="">Any</option>
+              </select>
+            </div>
+          </div>
+          
+                
+        </div>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <!-- Right: Auth/Profile -->
+  <div class="navbar-right">
+    {% if user.is_authenticated %}
+    <div class="profile-container">
+      <button id="profileBtn" class="profile-btn">
+        <img src="{{ user.profile.get_avatar_url }}" alt="{{ user.username }}’s avatar">
+      </button>
+      <div id="dropdownMenu" class="dropdown-menu">
+        <a href="{% url 'profile_settings' %}">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.4c-3.3 0-9.9 1.7-9.9 5v2.3h19.8V19.4c0-3.3-6.6-5-9.9-5z"/>
+          </svg>
+          Profile
+        </a>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit">
+            <svg viewBox="0 0 24 24">
+              <path d="M16 13v-2H7V8l-5 4 5 4v-3zM20 3H12v2h8v14h-8v2h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/>
+            </svg>
+            Logout
+          </button>
+        </form>
+      </div>
+    </div>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn glass-btn">Sign In</a>
+      <a href="{% url 'signup' %}" class="btn glass-btn">Sign Up</a>
+    {% endif %}
+  </div>
+</header>
+
+<!-- Backdrop and Results -->
+<div id="searchBackdrop" class="search-backdrop"></div>
+
+<script>
+  const input = document.getElementById('searchInput');
+  const resultsBox = document.getElementById('searchResults');
+  const filterPanel = document.getElementById('filterPanel');
+  const backdrop = document.getElementById('searchBackdrop');
+  const profileBtn = document.getElementById('profileBtn');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+  const filterBtn = document.getElementById('filterBtn');
+
+  let filterMode = false;
+
+  // --- Profile Dropdown Toggle ---
+  document.addEventListener('click', function (e) {
+    if (profileBtn && profileBtn.contains(e.target)) {
+      dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    } else if (dropdownMenu && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.style.display = 'none';
+    }
+  });
+
+  // --- Toggle filter mode on click ---
+  filterBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    filterMode = !filterMode;
+    filterBtn.classList.toggle('active', filterMode);
+  
+    const resultsVisible = resultsBox.style.display === 'block';
+  
+    if (filterMode) {
+      if (resultsVisible) {
+        // Show both: results on top, filter below results
+        filterPanel.style.display = 'block';
+  
+        requestAnimationFrame(() => {
+          filterPanel.style.left = `${resultsBox.offsetLeft}px`;
+          filterPanel.style.width = `${resultsBox.offsetWidth}px`;
+          filterPanel.style.top = `${resultsBox.offsetTop + resultsBox.offsetHeight}px`;
+        });
+  
+        backdrop.style.display = 'block';
+  
+      } else {
+        // No results visible, so show filter panel exactly where results would be
+        filterPanel.style.display = 'block';
+  
+        const containerRect = document.querySelector('.search-container').getBoundingClientRect();
+  
+        // Position filter panel at resultsBox position (top: 110% of container)
+        filterPanel.style.left = `0px`;
+        filterPanel.style.width = `${containerRect.width}px`;
+        filterPanel.style.top = `110%`; // same as resultsBox top
+  
+        backdrop.style.display = 'block';
+      }
+    } else {
+      filterPanel.style.display = 'none';
+  
+      // Hide backdrop only if resultsBox also hidden
+      if (resultsBox.style.display === 'none') {
+        backdrop.style.display = 'none';
+      }
+    }
+  });
+  
+  
+  
+  
+  
+
+  // --- Live Search + Position Filter Panel ---
+  input?.addEventListener('input', async function () {
+    const query = input.value.trim();
+    const yearFromVal = yearFrom.value;
+    const yearToVal = yearTo.value;
+  
+    if (!query) {
+      resultsBox.style.display = 'none';
+  
+      if (filterMode) {
+        filterPanel.style.display = 'block';
+  
+        const containerRect = document.querySelector('.search-container').getBoundingClientRect();
+  
+        filterPanel.style.left = '0px';
+        filterPanel.style.width = `${containerRect.width}px`;
+        filterPanel.style.top = '110%';
+  
+        backdrop.style.display = 'block';
+      } else {
+        filterPanel.style.display = 'none';
+        backdrop.style.display = 'none';
+      }
+      return;
+    }
+  
+    try {
+      let url = `/search-suggestions/?q=${encodeURIComponent(query)}`;
+      if (yearFromVal) url += `&year_from=${yearFromVal}`;
+      if (yearToVal) url += `&year_to=${yearToVal}`;
+  
+      const response = await fetch(url);
+      const data = await response.json();
+  
+      resultsBox.innerHTML = '';
+      if (data.results.length > 0) {
+        data.results.forEach(track => {
+          const item = document.createElement('a');
+          item.href = `/track/${track.id}/`;
+          item.classList.add('track-item');
+          item.innerHTML = `
+            <img src="${track.cover_image || '/media/default.jpg'}" alt="${track.title}" class="track-thumb">
+            <div class="track-info">
+              <span class="track-title">${track.title}</span>
+              <span class="track-artist">${track.artist}</span>
+            </div>
+          `;
+          resultsBox.appendChild(item);
+        });
+  
+        resultsBox.style.display = 'block';
+        backdrop.style.display = 'block';
+  
+        if (filterMode) {
+          filterPanel.style.display = 'block';
+          requestAnimationFrame(() => {
+            filterPanel.style.left = `${resultsBox.offsetLeft}px`;
+            filterPanel.style.width = `${resultsBox.offsetWidth}px`;
+            filterPanel.style.top = `${resultsBox.offsetTop + resultsBox.offsetHeight}px`;
+          });
+        } else {
+          filterPanel.style.display = 'none';
+        }
+  
+      } else {
+        // No results found
+        resultsBox.style.display = 'none';
+  
+        if (filterMode) {
+          filterPanel.style.display = 'block';
+  
+          const containerRect = document.querySelector('.search-container').getBoundingClientRect();
+          filterPanel.style.left = `0px`;
+          filterPanel.style.width = `${containerRect.width}px`;
+          filterPanel.style.top = `110%`; // same position as results
+  
+          backdrop.style.display = 'block';
+        } else {
+          filterPanel.style.display = 'none';
+          backdrop.style.display = 'none';
+        }
+      }
+  
+    } catch (err) {
+      console.error('Search error:', err);
+    }
+  });
+  
+  
+
+  // --- Click outside hides search & filter dropdowns ---
+  document.addEventListener('click', function (e) {
+    const clickedInsideSearch = resultsBox.contains(e.target) || input.contains(e.target);
+    const clickedInsideFilter = filterPanel.contains(e.target);
+    const clickedFilterBtn = filterBtn.contains(e.target);
+
+    // Only hide results if click is truly outside everything
+    if (!clickedInsideSearch && !clickedInsideFilter && !clickedFilterBtn) {
+      resultsBox.style.display = 'none';
+      backdrop.style.display = 'none';
+    }
+
+    // Only hide filter panel if clicked outside all three
+    if (!clickedInsideFilter && !clickedInsideSearch && !clickedFilterBtn) {
+      filterPanel.style.display = 'none';
+    }
+  });
+</script>
+
+<script>
+  const yearFrom = document.getElementById('yearFrom');
+  const yearTo = document.getElementById('yearTo');
+  
+  const currentYear = new Date().getFullYear();
+  const startYear = 1900;
+  
+  // Populate From dropdown (descending)
+  function populateFromDropdown() {
+    for (let y = currentYear; y >= startYear; y--) {
+      const option = document.createElement('option');
+      option.value = y;
+      option.textContent = y;
+      yearFrom.appendChild(option);
+    }
+  }
+  
+  // Populate To dropdown with years >= fromYear
+  function populateToDropdown(fromYear) {
+    // Clear previous options except "Any"
+    yearTo.innerHTML = '<option value="">Any</option>';
+  
+    let start = fromYear || startYear;
+    if (!fromYear || fromYear === '') {
+      start = startYear;
+    }
+  
+    for (let y = start; y <= currentYear; y++) {
+      const option = document.createElement('option');
+      option.value = y;
+      option.textContent = y;
+      yearTo.appendChild(option);
+    }
+  }
+  
+  // Initial population
+  populateFromDropdown();
+  populateToDropdown();
+  
+  // Event: update To options when From changes
+  yearFrom.addEventListener('change', () => {
+    const fromYear = yearFrom.value;
+    if (fromYear) {
+      yearTo.disabled = false;
+      populateToDropdown(Number(fromYear));
+      // Optional: Reset To if it’s less than new From
+      if (yearTo.value && Number(yearTo.value) < Number(fromYear)) {
+        yearTo.value = '';
+      }
+    } else {
+      yearTo.disabled = true;
+      yearTo.value = '';
+      populateToDropdown();
+    }
+  });
+  
+
+// Whenever yearFrom or yearTo changes, trigger input event on searchInput to refresh results
+yearFrom.addEventListener('change', () => {
+  input.dispatchEvent(new Event('input'));
+});
+
+yearTo.addEventListener('change', () => {
+  input.dispatchEvent(new Event('input'));
+});
+
+
+</script>

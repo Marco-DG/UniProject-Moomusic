@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="delete-confirm-container">
+    <h2>Delete Track</h2>
+    <p>
+      Are you sure you want to delete
+      <strong>“{{ object.title }}”</strong>?
+    </p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn glass-btn">Yes, delete</button>
+      <a href="{% url 'home' %}" class="btn small-btn">Cancel</a>
+    </form>
+  </div>
+{% endblock %}
