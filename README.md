@@ -19,9 +19,9 @@ MooMusic is a modern music player web app built with Django. It allows users to 
 
 ## 🚀 Live Demo
 
-App deployed at: [https://web-production-7fa0d.up.railway.app/track/3/](https://web-production-7fa0d.up.railway.app/track/3/)
+App deployed at: [https://web-production-7fa0d.up.railway.app](https://web-production-7fa0d.up.railway.app)
 
 There are two users:
 
 - Marco (password: marco) is the Admin and **Listener**
-- Matteo (password: matteo) is a **Curator**
+- Matteo (password: matteo) is a "
