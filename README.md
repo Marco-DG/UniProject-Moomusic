@@ -12,3 +12,6 @@ MooMusic is a modern music player web app built with Django. It allows users to 
 
 ### 📁 Playlist View
 ![Playlist Screenshot](showcase3.png)
+
+### 👤 User Profile View  
+![Profile Screenshot](showcase4.png)
