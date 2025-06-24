@@ -33,6 +33,10 @@ ALLOWED_HOSTS = [
     os.getenv('RAILWAY_STATIC_URL', 'web-production-7fa0d.up.railway.app')
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-7fa0d.up.railway.app',
+]
+
 
 
 # Static files (CSS, JavaScript, Images)
