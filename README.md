@@ -34,5 +34,5 @@ App deployed at: [https://web-production-7fa0d.up.railway.app](https://web-produ
 
 There are two users:
 
-- Marco (password: marco) is the Admin and **Listener**
-- Matteo (password: matteo) is a "
+- Marco (password: marco) is the Admin and a **Listener**
+- Matteo (password: matteo) is a **Curator**
